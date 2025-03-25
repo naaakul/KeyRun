@@ -5,11 +5,9 @@ import { Input } from "./ui/input";
 import { Car } from "./car";
 import { MiniMap } from "@/components/mini-map";
 
-// Sample text for typing - 30 words
 const SAMPLE_TEXT =
   "The quick brown fox jumps over the lazy dog. A gentle breeze rustles through the autumn leaves as birds chirp melodiously in the distance. Children laugh and play in the park nearby while adults enjoy their peaceful afternoon.";
 
-// AI car configurations
 const AI_CARS = [
   { id: 1, color: "red", speedFactor: 0.8 },
   { id: 2, color: "blue", speedFactor: 1.2 },
@@ -27,14 +25,12 @@ export default function TypingRaceGame() {
   );
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Calculate progress based on correct typing
   useEffect(() => {
     if (!gameActive && input.length > 0) {
       setGameActive(true);
       setStartTime(Date.now());
     }
 
-    // Calculate how much of the sample text has been correctly typed
     let correctChars = 0;
     for (let i = 0; i < input.length; i++) {
       if (input[i] === SAMPLE_TEXT[i]) {
@@ -45,13 +41,11 @@ export default function TypingRaceGame() {
     const newProgress = (correctChars / SAMPLE_TEXT.length) * 100;
     setProgress(newProgress);
 
-    // Check if game is complete
     if (correctChars === SAMPLE_TEXT.length) {
       setGameActive(false);
     }
   }, [input, gameActive]);
 
-  // Update AI car positions
   useEffect(() => {
     if (!gameActive) return;
 
@@ -67,7 +61,6 @@ export default function TypingRaceGame() {
     return () => clearInterval(interval);
   }, [gameActive]);
 
-  // Reset the game
   const resetGame = () => {
     setInput("");
     setProgress(0);
@@ -89,13 +82,8 @@ export default function TypingRaceGame() {
         />
       </div>
 
-      {/* Mini map */}
       <div className="absolute top-4 right-4">
-        <MiniMap
-          userProgress={progress}
-          aiPositions={aiPositions}
-          aiCars={AI_CARS}
-        />
+        <MiniMap />
       </div>
 
       {/* Race track */}

@@ -15,12 +15,12 @@ interface CarProps {
           zIndex: isUser ? 10 : 5,
         }}
       >
-        {/* Simple car shape */}
+        {/*shape */}
         <div className={`relative w-12 h-6 rounded-md ${isUser ? "shadow-md" : ""}`} style={{ backgroundColor: color }}>
-          {/* Car windows */}
+          {/*windows*/}
           <div className="absolute top-1 left-2 right-2 h-2 bg-blue-100 rounded-sm opacity-70" />
   
-          {/* Car wheels */}
+          {/*wheels */}
           <div className="absolute -bottom-1 left-1 w-2 h-2 bg-gray-800 rounded-full" />
           <div className="absolute -bottom-1 right-1 w-2 h-2 bg-gray-800 rounded-full" />
         </div>
