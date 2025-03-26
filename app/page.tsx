@@ -38,15 +38,15 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4 md:p-24 bg-black relative">
       {showOptions && (
-        <div className="absolute inset-0 flex items-center justify-center">
+        <div className="backdrop-blur-[7px] sm:backdrop-blur-[12px] absolute inset-0 flex items-center justify-center z-40">
           <div className="flex gap-2 w-80 bg-black flex-col p-5 rounded-lg border border-zinc-800 z-50">
-            <button className="px-4 py-2 bg-primary text-zinc-100 rounded-md hover:bg-primary/90 cursor-pointer" onClick={() => setShowOptions(false)}>
+            <button className="px-4 py-2 bg-primary text-zinc-100 rounded-md hover:bg-primary/50 cursor-pointer" onClick={() => setShowOptions(false)}>
               Join
             </button>
-            <button className="px-4 py-2 bg-primary text-zinc-100 rounded-md hover:bg-primary/90 cursor-pointer" onClick={() => setShowOptions(false)}>
+            <button className="px-4 py-2 bg-primary text-zinc-100 rounded-md hover:bg-primary/50 cursor-pointer" onClick={() => setShowOptions(false)}>
               Create
             </button>
-            <button className="px-4 py-2 bg-primary text-zinc-100 rounded-md hover:bg-primary/90 cursor-pointer" onClick={() => setShowOptions(false)}>
+            <button className="px-4 py-2 bg-primary text-zinc-100 rounded-md hover:bg-primary/50 cursor-pointer" onClick={() => setShowOptions(false)}>
               Computer
             </button>
           </div>

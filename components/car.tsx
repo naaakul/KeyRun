@@ -10,7 +10,7 @@ interface CarProps {
       <div
         className="absolute top-1/2 transition-all duration-300 ease-out"
         style={{
-          left: `${position}%`,
+          left: `${position-2.7}%`,
           transform: `translateY(${offsetY - 10}px)`,
           zIndex: isUser ? 10 : 5,
         }}

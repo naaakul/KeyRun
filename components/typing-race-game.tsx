@@ -5,9 +5,6 @@ import { Input } from "./ui/input";
 import { Car } from "./car";
 import { MiniMap } from "@/components/mini-map";
 
-const SAMPLE_TEXT =
-  "The quick brown fox jumps over the lazy dog. A gentle breeze rustles through the autumn leaves as birds chirp melodiously in the distance. Children laugh and play in the park nearby while adults enjoy their peaceful afternoon.";
-
 const AI_CARS = [
   { id: 1, color: "red", speedFactor: 0.8 },
   { id: 2, color: "blue", speedFactor: 1.2 },
@@ -19,11 +16,22 @@ export default function TypingRaceGame() {
   const [input, setInput] = useState("");
   const [startTime, setStartTime] = useState<number | null>(null);
   const [gameActive, setGameActive] = useState(false);
+  const [text, setText] = useState("");
   const [progress, setProgress] = useState(0);
   const [aiPositions, setAiPositions] = useState<number[]>(
     AI_CARS.map(() => 0)
   );
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    fetch("http://api.quotable.io/random?minLength=250&maxLength=350")
+      .then((response) => response.json())
+      .then((data) => setText(data.content));
+  }, []);
+
+  const newText = () => {
+    
+  }
 
   useEffect(() => {
     if (!gameActive && input.length > 0) {
@@ -33,15 +41,15 @@ export default function TypingRaceGame() {
 
     let correctChars = 0;
     for (let i = 0; i < input.length; i++) {
-      if (input[i] === SAMPLE_TEXT[i]) {
+      if (input[i] === text[i]) {
         correctChars++;
       }
     }
 
-    const newProgress = (correctChars / SAMPLE_TEXT.length) * 100;
+    const newProgress = (correctChars / text.length) * 100;
     setProgress(newProgress);
 
-    if (correctChars === SAMPLE_TEXT.length) {
+    if (correctChars === text.length) {
       setGameActive(false);
     }
   }, [input, gameActive]);
@@ -73,7 +81,7 @@ export default function TypingRaceGame() {
   };
 
   const getHighlightedText = () => {
-    return SAMPLE_TEXT.split("").map((char, index) => {
+    return text.split("").map((char, index) => {
       if (index < input.length) {
         return (
           <span
@@ -101,7 +109,7 @@ export default function TypingRaceGame() {
       </div> */}
 
       <div className="absolute top-4 right-4">
-        <MiniMap />
+        <MiniMap progress={progress} opp={aiPositions} oppCars={AI_CARS}/>
       </div>
 
       {/* Race track */}
@@ -144,7 +152,7 @@ export default function TypingRaceGame() {
 
         <button
           onClick={resetGame}
-          className="px-4 py-2 bg-primary text-zinc-100 rounded-md hover:bg-primary/90 cursor-pointer"
+          className="px-4 py-2 bg-primary text-zinc-100 rounded-md hover:bg-primary/50 cursor-pointer"
         >
           Reset Game
         </button>
