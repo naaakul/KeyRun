@@ -75,20 +75,20 @@ export function MiniMap({ progress = 10 }: MiniMapProps) {
   }, [getPointOnPath, progress]);
 
   return (
-    <div className="relative w-40 h-40 bg-gray-100 rounded-full border-2 border-gray-300 overflow-hidden shadow-md">
+    <div className="relative w-40 h-40 bg-zinc-800 rounded-full border-2 border-zinc-700 overflow-hidden shadow-md">
       <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 200">
         <path 
           d={pathData}
           fill="none" 
           stroke="#CBD5E1" 
           strokeWidth="2" 
-          className="stroke-gray-400"
+          className="stroke-zinc-100"
         />
 
         <circle
           cx={dotPosition.x}
           cy={dotPosition.y}
-          r="4"
+          r="5"
           className="fill-black"
         />
       </svg>

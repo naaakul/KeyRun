@@ -72,24 +72,42 @@ export default function TypingRaceGame() {
     }
   };
 
+  const getHighlightedText = () => {
+    return SAMPLE_TEXT.split("").map((char, index) => {
+      if (index < input.length) {
+        return (
+          <span
+            key={index}
+            className={
+              input[index] === char ? "text-green-800" : "text-red-800"
+            }
+          >
+            {char}
+          </span>
+        );
+      }
+      return <span key={index}>{char}</span>;
+    });
+  };
+
   return (
     <div className="w-full max-w-4xl">
       {/* Distance indicator */}
-      <div className="relative mb-8 bg-gray-200 h-2 rounded-full overflow-hidden">
+      {/* <div className="relative mb-8 bg-gray-200 h-2 rounded-full overflow-hidden">
         <div
           className="absolute top-0 left-0 h-full bg-primary transition-all duration-300 ease-out"
           style={{ width: `${progress}%` }}
         />
-      </div>
+      </div> */}
 
       <div className="absolute top-4 right-4">
         <MiniMap />
       </div>
 
       {/* Race track */}
-      <div className="relative h-32 mb-8 bg-gray-100 rounded-lg overflow-hidden border border-gray-300">
+      <div className="relative h-32 mb-8 bg-zinc-900 rounded-lg overflow-hidden border border-zinc-700">
         {/* Track line */}
-        <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-400" />
+        <div className="absolute top-1/2 left-0 w-full h-1 bg-zinc-600" />
 
         {/* User car */}
         <Car position={progress} color="black" isUser={true} />
@@ -108,8 +126,8 @@ export default function TypingRaceGame() {
 
       {/* Typing area */}
       <div className="space-y-4">
-        <div className="p-4 bg-gray-100 rounded-lg text-gray-700 border border-gray-300">
-          {SAMPLE_TEXT}
+        <div className="p-4 bg-zinc-900 rounded-lg text-zinc-100 border border-zinc-700">
+          {getHighlightedText()}
         </div>
 
         <Input
@@ -120,13 +138,13 @@ export default function TypingRaceGame() {
             setInput(e.target.value)
           }
           placeholder="Start typing to begin the race..."
-          className="w-full p-4"
+          className="w-full p-4 text-zinc-100"
           autoFocus
         />
 
         <button
           onClick={resetGame}
-          className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90"
+          className="px-4 py-2 bg-primary text-zinc-100 rounded-md hover:bg-primary/90 cursor-pointer"
         >
           Reset Game
         </button>
