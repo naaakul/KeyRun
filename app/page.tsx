@@ -3,7 +3,7 @@
 import { useState } from "react";
 import TypingRaceGame from "../components/typing-race-game";
 
-export default function Home() {
+export default function Page() {
   const [showOptions, setShowOptions] = useState(true);
 
   // if (showOptions) {

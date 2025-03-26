@@ -30,7 +30,7 @@ export default function TypingRaceGame() {
   }, []);
 
   // const newText = () => {
-    
+
   // }
 
   useEffect(() => {
@@ -52,20 +52,28 @@ export default function TypingRaceGame() {
     if (correctChars === text.length) {
       setGameActive(false);
     }
-  }, [input, gameActive]);
+  }, [input, gameActive, text]);
 
   useEffect(() => {
     if (!gameActive) return;
-
+  
+    // Generate unique random speeds for each car (between 25-50 WPM)
+    const updatedSpeeds = AI_CARS.map(() => Math.random() * (50 - 25) + 25);
+  
+    setAiPositions((prev) =>
+      prev.map(() => 0) // Reset positions at the start
+    );
+  
     const interval = setInterval(() => {
       setAiPositions((prev) =>
         prev.map((pos, idx) => {
-          const newPos = pos + AI_CARS[idx].speedFactor * 0.5;
+          const speedFactor = updatedSpeeds[idx] * 0.002; // 10x slower
+          const newPos = pos + speedFactor;
           return newPos > 100 ? 100 : newPos;
         })
       );
     }, 100);
-
+  
     return () => clearInterval(interval);
   }, [gameActive]);
 
@@ -109,7 +117,7 @@ export default function TypingRaceGame() {
       </div> */}
 
       <div className="absolute top-4 right-4">
-        <MiniMap progress={progress} opp={aiPositions} oppCars={AI_CARS}/>
+        <MiniMap progress={progress} opp={aiPositions} oppCars={AI_CARS} />
       </div>
 
       {/* Race track */}

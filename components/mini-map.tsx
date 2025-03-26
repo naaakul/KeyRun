@@ -1,48 +1,8 @@
-// interface MiniMapProps {
-//     userProgress: number
-//     aiPositions: number[]
-//     aiCars: { id: number; color: string; speedFactor: number }[]
-//   }
-
-//   export function MiniMap({ userProgress, aiPositions, aiCars }: MiniMapProps) {
-//     return (
-//       <div className="relative w-20 h-20 bg-gray-100 rounded-full border-2 border-gray-300 overflow-hidden shadow-md">
-//         {/* Track circle */}
-//         <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-400 transform -translate-y-1/2" />
-
-//         {/* Center point */}
-//         <div className="absolute top-1/2 left-1/2 w-2 h-2 bg-gray-500 rounded-full transform -translate-x-1/2 -translate-y-1/2" />
-
-//         {/* User position */}
-//         <div
-//           className="absolute w-2 h-2 bg-black rounded-full transform -translate-x-1/2 -translate-y-1/2"
-//           style={{
-//             left: "50%",
-//             top: "50%",
-//             transform: `rotate(${userProgress * 3.6}deg) translateY(-8px) rotate(-${userProgress * 3.6}deg)`,
-//           }}
-//         />
-
-//         {/* AI positions */}
-//         {aiCars.map((car, index) => (
-//           <div
-//             key={car.id}
-//             className="absolute w-2 h-2 rounded-full transform -translate-x-1/2 -translate-y-1/2"
-//             style={{
-//               backgroundColor: car.color,
-//               left: "50%",
-//               top: "50%",
-//               transform: `rotate(${aiPositions[index] * 3.6}deg) translateY(-8px) rotate(-${aiPositions[index] * 3.6}deg)`,
-//             }}
-//           />
-//         ))}
-//       </div>
-//     )
-//   }
+"use client";
 
 import React, { useMemo } from "react";
 
-interface aiCars {
+interface AiCars {
   id: number;
   color: string;
   speedFactor: number;
@@ -51,7 +11,7 @@ interface aiCars {
 interface MiniMapProps {
   progress?: number;
   opp: number[];
-  oppCars: aiCars[];
+  oppCars: AiCars[];
 }
 
 export function MiniMap({ oppCars, opp, progress = 0 }: MiniMapProps) {
@@ -60,14 +20,27 @@ export function MiniMap({ oppCars, opp, progress = 0 }: MiniMapProps) {
 
   const getPointOnPath = useMemo(() => {
     return (progress: number) => {
-      // const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      path.setAttribute("d", pathData);
+      // Only perform calculations in browser environment
+      if (typeof window !== "undefined") {
+        const svg = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "svg"
+        );
+        const path = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "path"
+        );
+        path.setAttribute("d", pathData);
+        svg.appendChild(path);
 
-      const length = path.getTotalLength();
-      const point = path.getPointAtLength(((100 - progress) / 100) * length);
+        const length = path.getTotalLength();
+        const point = path.getPointAtLength(((100 - progress) / 100) * length);
 
-      return { x: point.x, y: point.y };
+        return { x: point.x, y: point.y };
+      }
+
+      // Fallback position if not in browser
+      return { x: 50, y: (progress / 100) * 200 };
     };
   }, [pathData]);
 
@@ -90,13 +63,6 @@ export function MiniMap({ oppCars, opp, progress = 0 }: MiniMapProps) {
           className="stroke-zinc-100"
         />
 
-        <circle
-          cx={dotPosition.x}
-          cy={dotPosition.y}
-          r="5"
-          className="fill-black transition-all duration-300 ease-out"
-        />
-
         {oppCars.map((car) => {
           const oppPosition = getPointOnPath(opp[car.id - 1] || 0);
           return (
@@ -110,10 +76,16 @@ export function MiniMap({ oppCars, opp, progress = 0 }: MiniMapProps) {
             />
           );
         })}
+
+        <circle
+          cx={dotPosition.x}
+          cy={dotPosition.y}
+          r="5"
+          className="fill-black transition-all duration-300 ease-out"
+        />
       </svg>
     </div>
   );
 }
 
 export default MiniMap;
-
