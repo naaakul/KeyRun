@@ -29,9 +29,9 @@ export default function TypingRaceGame() {
       .then((data) => setText(data.content));
   }, []);
 
-  const newText = () => {
+  // const newText = () => {
     
-  }
+  // }
 
   useEffect(() => {
     if (!gameActive && input.length > 0) {

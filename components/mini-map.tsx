@@ -60,7 +60,7 @@ export function MiniMap({ oppCars, opp, progress = 0 }: MiniMapProps) {
 
   const getPointOnPath = useMemo(() => {
     return (progress: number) => {
-      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      // const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
       const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
       path.setAttribute("d", pathData);
 
