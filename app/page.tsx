@@ -2,9 +2,38 @@
 
 import { useState } from "react";
 import TypingRaceGame from "../components/typing-race-game";
+import JoinRoom from "../components/joinRoom";
+import { RoomState } from "@/lib/types";
+
+interface JoinRoomProps {
+  connectToWebSocket: (username: string, roomCode: string) => void;
+}
 
 export default function Page() {
   const [showOptions, setShowOptions] = useState(true);
+  const [join, setJoin] = useState(false);
+  const [webSocket, setWebSocket] = useState<WebSocket | null>(null);
+  const [roomState, setRoomState] = useState<RoomState | null>(null);
+
+  const connectToWebSocket = (username: string, roomCode: string) => {
+    const ws = new WebSocket("ws://localhost:8080");
+
+    ws.onopen = () => {
+      ws.send(
+        JSON.stringify({
+          type: "join",
+          payload: { username, roomCode },
+        })
+      );
+    };
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      setRoomState(data);
+    };
+
+    setWebSocket(ws);
+  };
 
   // if (showOptions) {
   //   return (
@@ -40,15 +69,30 @@ export default function Page() {
       {showOptions && (
         <div className="backdrop-blur-[7px] sm:backdrop-blur-[12px] absolute inset-0 flex items-center justify-center z-40">
           <div className="flex gap-2 w-80 bg-black flex-col p-5 rounded-lg border border-zinc-800 z-50">
-            <button className="px-4 py-2 bg-primary text-zinc-100 rounded-md hover:bg-primary/50 cursor-pointer" onClick={() => setShowOptions(false)}>
-              Join
-            </button>
-            <button className="px-4 py-2 bg-primary text-zinc-100 rounded-md hover:bg-primary/50 cursor-pointer" onClick={() => setShowOptions(false)}>
-              Create
-            </button>
-            <button className="px-4 py-2 bg-primary text-zinc-100 rounded-md hover:bg-primary/50 cursor-pointer" onClick={() => setShowOptions(false)}>
-              Computer
-            </button>
+            {join ? ( 
+              <JoinRoom connectToWebSocket={connectToWebSocket} />
+            ) : (
+              <>
+                <button
+                  className="px-4 py-2 bg-primary text-zinc-100 rounded-md hover:bg-primary/50 cursor-pointer"
+                  onClick={() => setJoin(true)}
+                >
+                  Join
+                </button>
+                <button
+                  className="px-4 py-2 bg-primary text-zinc-100 rounded-md hover:bg-primary/50 cursor-pointer"
+                  onClick={() => setShowOptions(false)}
+                >
+                  Create
+                </button>
+                <button
+                  className="px-4 py-2 bg-primary text-zinc-100 rounded-md hover:bg-primary/50 cursor-pointer"
+                  onClick={() => setShowOptions(false)}
+                >
+                  Computer
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}
