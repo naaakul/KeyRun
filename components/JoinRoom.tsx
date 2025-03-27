@@ -19,7 +19,7 @@ const router = useRouter();
           if (data.exists) {
             connectToWebSocket(username, roomCode);
             // navigate(`/room/${roomCode}`);
-            router.push('/room/${roomCode}');
+            router.push(`/room/${roomCode}`);
           } else {
             alert("Room does not exist");
           }
